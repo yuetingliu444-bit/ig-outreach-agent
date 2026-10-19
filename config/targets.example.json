@@ -1,0 +1,12 @@
+# 这个文件决定 Agent 去哪找人。填完删掉注释行即可（JSON 不支持注释，用 run.py --set-targets 写入更安全）
+
+# hashtags：话题标签，不加 #。例：wirelessmic / contentcreator / vanlife
+# keywords：搜索框关键词，比标签更宽泛
+# competitors：竞品或同量级账号的 username，抓他们的粉丝列表（最精准的一档）
+
+{
+  "hashtags": ["wirelessmic", "contentcreator"],
+  "keywords": ["tech reviewer", "filmmaking"],
+  "competitors": ["some_competitor_handle"],
+  "max_per_source": 60
+}

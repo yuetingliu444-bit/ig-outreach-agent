@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GTM 求职干货 · 双平台发布包</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background: #F0F3F7; color: #1A2B3C; padding: 40px 20px; }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  header { margin-bottom: 28px; }
+  header h1 { font-size: 30px; font-weight: 800; }
+  header p { margin-top: 8px; color: #5A7184; font-size: 15px; }
+  .card { background: #fff; border-radius: 16px; padding: 26px 30px; margin-bottom: 22px; border: 1px solid #E4EBF1; box-shadow: 0 6px 24px rgba(10,31,61,.05); }
+  .card h2 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+  .card .hint { font-size: 13px; color: #8496A8; margin-bottom: 16px; }
+  .opt { border: 2px solid #E4EBF1; border-radius: 12px; padding: 14px 18px; margin-bottom: 12px; cursor: pointer; transition: all .15s; position: relative; }
+  .opt:hover { border-color: #3FE0D0; background: #F7FDFD; }
+  .opt.sel { border-color: #0E8FA0; background: #F0FBFC; }
+  .opt .lab { font-size: 12px; font-weight: 800; color: #0E8FA0; letter-spacing: 1px; margin-bottom: 4px; }
+  .opt .txt { font-size: 17px; font-weight: 700; line-height: 1.4; }
+  pre.body-txt { white-space: pre-wrap; word-break: break-word; font-family: inherit; font-size: 15px; line-height: 1.75; background: #F8FAFC; border: 1px solid #E4EBF1; border-radius: 12px; padding: 20px 22px; max-height: 520px; overflow-y: auto; }
+  .btn { display: inline-block; border: none; background: #0B2E4A; color: #fff; font-size: 14px; font-weight: 700; padding: 10px 22px; border-radius: 10px; cursor: pointer; margin-top: 14px; }
+  .btn:hover { background: #0E6E7E; }
+  .btn.ok { background: #0E9E7E; }
+  .tagrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .tag { background: #EDF3F8; color: #3D5A76; font-size: 13px; font-weight: 600; padding: 5px 12px; border-radius: 999px; }
+  .slides { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 6px; }
+  .slides img { width: 100%; border-radius: 10px; border: 1px solid #E4EBF1; display: block; }
+  .slides .cap { font-size: 12px; color: #8496A8; text-align: center; margin-top: 4px; }
+  .warn { background: #FFF8F0; border: 1px solid #F5D9B8; border-radius: 12px; padding: 16px 20px; font-size: 14px; line-height: 1.7; color: #7A5230; margin-top: 14px; }
+  .warn b { color: #B5541F; }
+  .toast { position: fixed; left: 50%; bottom: 36px; transform: translateX(-50%); background: #0B2E4A; color: #fff; font-size: 14px; font-weight: 700; padding: 12px 26px; border-radius: 999px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>GTM 求职干货 · 双平台发布包</h1>
+  <p>同选题原创版 ｜ 配图 6 张（4:5，小红书 / IG 轮播通用）｜ 发布前只需确认 3 处 🟡（见文末）</p>
+</header>
+
+<div class="card">
+  <h2>① 小红书标题（点选一个）</h2>
+  <div class="hint">点击选中，复制按钮会复制选中的那个</div>
+  <div class="opt sel" data-t="月薪 2w+ 起、3 年翻倍，这个岗位正在被出海企业抢疯"><div class="lab">版本 A · 数字钩子</div><div class="txt">月薪 2w+ 起、3 年翻倍，这个岗位正在被出海企业抢疯</div></div>
+  <div class="opt" data-t="在 agency 干了一年，发现品牌方都在抢 GTM 的人"><div class="lab">版本 B · 经历钩子</div><div class="txt">在 agency 干了一年，发现品牌方都在抢 GTM 的人</div></div>
+  <div class="opt" data-t="别卷传统运营了，真正的高薪赛道是 GTM"><div class="lab">版本 C · 反直觉钩子</div><div class="txt">别卷传统运营了，真正的高薪赛道是 GTM</div></div>
+  <button class="btn" onclick="copyTitle(this)">复制选中标题</button>
+</div>
+
+<div class="card">
+  <h2>② 小红书正文</h2>
+  <div class="hint">已按小红书阅读习惯分段，直接整段复制粘贴即可</div>
+  <pre class="body-txt" id="xhs">先讲一个我在工作中的真实观察。
+
+我在一家做海外达人营销的 agency 上班，日常就是建联 KOL、盯投放、复盘数据。对接的甲方多了以后，我发现一个反直觉的现象：品牌方预算给得最爽快的岗位，不是投放，不是运营，而是 GTM。
+
+投放是花钱的执行岗，GTM 是操盘岗——决定「这钱怎么花，才能把货卖爆」。
+
+01 ｜ GTM 到底是干嘛的
+
+一句话：产品做出来之后，负责把它卖爆、做火、做出声量的人。
+
+产品经理管「把产品做出来」，GTM 管「把产品卖出去」。
+
+一款新品上市，从定价、卖点提炼、传播节奏、渠道策略到库存节奏，全程都是 GTM 在牵头。产品、研发、营销、销售、供应链，全靠这个岗位串起来。
+
+02 ｜ 为什么这个岗位薪资高
+
+两个原因：稀缺 + 直接对结果负责。
+
+会做执行的人一大把，能操盘一个产品从 0 到上市打爆的人极少。
+
+直接对销量负责的岗位，薪资天花板都高。
+
+03 ｜ 入行门槛：不卡专业，卡实习
+
+GTM 不挑专业，文商科理工科都有上岸的。但有两段实习几乎是标配：
+
+① 产品策划 / 产品营销实习（优先级最高）：攒新品调研、需求梳理、项目评审经验
+
+② 甲方品牌 / 市场营销实习：优先智能硬件、跨境出海企业，攒传播策划和声量打造经验
+
+我自己就是「乙方投放 → 甲方品牌」的路径走过来的，想转 GTM 的话这段经历是最直接的跳板。
+
+04 ｜ 一个大多数人没意识到的加分项
+
+这是我最想说的，也是一线观察：
+
+现在 GTM 做品牌落地，达人营销已经是标配打法。但大部分 GTM 不懂达人生态——不会判断达人数据真假、不知道建联节奏、看不懂投放复盘。
+
+你懂，你就比同龄人多一张牌。
+
+05 ｜ 给应届生的 3 个动作
+
+1️⃣ 先攒一段产品策划实习——这是入场券
+
+2️⃣ 甲方品牌实习，优先选智能硬件 / 跨境出海方向
+
+3️⃣ 花一周入门达人营销：怎么辨数据真假、投放怎么复盘
+
+最后说句实话：求职没有不卷的赛道，但有「卷得值不值」的赛道。
+
+GTM 的好处是，不卡专业、看实操、晋升透明。你攒的每段经历，都直接长在下一个岗位要的能力上。</pre>
+  <button class="btn" onclick="copyText('xhs', this)">复制正文</button>
+  <div class="tagrow">
+    <span class="tag">#求职</span><span class="tag">#应届生求职</span><span class="tag">#GTM</span><span class="tag">#市场营销</span><span class="tag">#职业规划</span><span class="tag">#实习</span><span class="tag">#品牌出海</span><span class="tag">#出海营销</span><span class="tag">#职场干货</span><span class="tag">#高薪岗位</span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>③ Ins Caption</h2>
+  <div class="hint">建议小红书先发，Ins 间隔 1–2 天（同一天双发可能被判搬运）</div>
+  <pre class="body-txt" id="ig">做 KOL agency 这一年，我发现品牌方最缺的不是投放，是 GTM。
+
+投放是花钱的执行岗，GTM 是操盘岗——决定一个产品怎么从 0 卖到爆。
+
+一篇讲清楚👇
+1️⃣ GTM 在做什么
+2️⃣ 为什么薪资高
+3️⃣ 应届生怎么入行
+4️⃣ 大多数人没意识到的加分项（Slide 5）
+
+💬 你在考虑 GTM 吗？评论区聊聊
+🔗 media kit 见主页链接</pre>
+  <button class="btn" onclick="copyText('ig', this)">复制 Ins 文案</button>
+  <div class="tagrow">
+    <span class="tag">#GTM</span><span class="tag">#求职干货</span><span class="tag">#品牌出海</span><span class="tag">#市场营销</span><span class="tag">#职业规划</span><span class="tag">#应届生</span><span class="tag">#实习</span><span class="tag">#达人营销</span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>④ 配图预览（6 张，按顺序上传）</h2>
+  <div class="hint">1080×1350（4:5）——小红书最优比例，IG 轮播通用</div>
+  <div class="slides">
+    <div><img src="slide_1.png" alt="slide1"><div class="cap">1 · 封面：品牌方最缺的不是投放</div></div>
+    <div><img src="slide_2.png" alt="slide2"><div class="cap">2 · 产品经理 vs GTM</div></div>
+    <div><img src="slide_3.png" alt="slide3"><div class="cap">3 · 为什么薪资高</div></div>
+    <div><img src="slide_4.png" alt="slide4"><div class="cap">4 · 两段核心实习</div></div>
+    <div><img src="slide_5.png" alt="slide5"><div class="cap">5 · 加分项：懂达人营销</div></div>
+    <div><img src="slide_6.png" alt="slide6"><div class="cap">6 · 3 个动作 + CTA</div></div>
+  </div>
+  <div class="warn">
+    <b>发布前确认 3 处：</b>① 图 3 的「15-25k」数字按你所在城市/目标企业真实区间核一遍，宁可写「15k+ 起」也别写死；② 「在一家做出海营销的 agency 上班」这个身份表述如果公司敏感，模糊成「做出海营销的公司」；③ 全程没点名任何甲方品牌——这是刻意的，接了名评论区会有人来对细节。
+  </div>
+</div>
+
+</div>
+<div class="toast" id="toast">已复制 ✓</div>
+<script>
+  var opts = document.querySelectorAll('.opt');
+  var chosen = opts[0];
+  opts.forEach(function(o){ o.addEventListener('click', function(){
+    opts.forEach(function(x){ x.classList.remove('sel'); });
+    o.classList.add('sel'); chosen = o;
+  });});
+  function toast(msg){ var t = document.getElementById('toast'); t.textContent = msg || '已复制 ✓'; t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); }, 1600); }
+  function doCopy(text, btn){
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function(){ btn.textContent = '已复制 ✓'; btn.classList.add('ok'); toast(); setTimeout(function(){ btn.textContent = btn.dataset.label; btn.classList.remove('ok'); }, 1600); });
+    } else {
+      var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); toast(); } catch(e) { toast('复制失败，请手动选择'); }
+      document.body.removeChild(ta);
+    }
+  }
+  function copyTitle(btn){ btn.dataset.label = btn.textContent; doCopy(chosen.dataset.t, btn); }
+  function copyText(id, btn){ btn.dataset.label = btn.textContent; doCopy(document.getElementById(id).textContent, btn); }
+</script>
+</body>
+</html>

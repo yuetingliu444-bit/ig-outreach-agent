@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", Helvetica, Arial, sans-serif;
+    background: #111; display: flex; gap: 24px; flex-wrap: wrap; padding: 24px;
+  }
+  .slide { width: 1080px; height: 1350px; position: relative; overflow: hidden; flex: 0 0 auto; }
+  .wordmark { font-weight: 800; letter-spacing: 4px; font-size: 30px; color: #fff; }
+  .wordmark .dot { color: #18BFD4; }
+  .tag { font-size: 15px; letter-spacing: 3px; color: rgba(255,255,255,.65); text-transform: uppercase; font-weight: 600; margin-top: 6px; }
+  .foot { position: absolute; bottom: 38px; left: 0; right: 0; text-align: center; font-size: 15px; letter-spacing: 2px; color: rgba(255,255,255,.45); }
+  .badge { display:inline-block; padding: 8px 16px; border-radius: 999px; background: rgba(63,224,208,.15); color:#3FE0D0; font-size: 18px; font-weight: 700; letter-spacing:1px; }
+
+  /* S1 cover */
+  .s1 { background: linear-gradient(150deg, #07182E 0%, #0B2E4A 45%, #0E6E7E 100%); }
+  .s1 .top { position: absolute; top: 60px; left: 70px; }
+  .s1 .hl { position: absolute; top: 330px; left: 70px; right: 70px; font-size: 84px; line-height: 1.18; font-weight: 800; color: #fff; }
+  .s1 .hl .accent { color: #3FE0D0; }
+  .s1 .sub { position: absolute; top: 800px; left: 70px; right: 70px; font-size: 28px; line-height: 1.55; color: rgba(255,255,255,.8); font-weight: 500; }
+  .s1 .chips { position: absolute; bottom: 110px; left: 70px; right: 70px; display:flex; gap:12px; flex-wrap:wrap; }
+  .s1 .chip { padding: 9px 18px; border-radius: 999px; font-size: 18px; font-weight: 600; background: rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.25); }
+
+  /* S2 vs (light) */
+  .s2 { background: #F4F7FA; }
+  .s2 .top { position: absolute; top: 60px; left: 70px; }
+  .s2 .wordmark { color: #0A1F3D; }
+  .s2 .tag { color: #5A7184; }
+  .s2 .title { position: absolute; top: 190px; left: 70px; right: 70px; font-size: 56px; font-weight: 800; color: #0A1F3D; line-height: 1.25; }
+  .s2 .title .accent { color: #0E8FA0; }
+  .vcards { position: absolute; top: 380px; left: 70px; right: 70px; display:flex; flex-direction:column; gap: 24px; }
+  .vcard { background:#fff; border-radius: 20px; padding: 28px 32px; border:1px solid #E4EBF1; box-shadow:0 10px 30px rgba(10,31,61,.06); }
+  .vcard .who { font-size: 22px; font-weight: 700; color:#0E8FA0; letter-spacing:1px; }
+  .vcard .what { font-size: 30px; font-weight: 800; color:#0A1F3D; margin-top: 10px; line-height: 1.35; }
+  .vcard .what .accent { color:#E0563F; }
+  .s2 .bottom { position: absolute; bottom: 150px; left: 70px; right: 70px; font-size: 24px; color:#5A7184; line-height: 1.55; }
+  .s2 .bottom b { color:#0A1F3D; }
+  .s2 .foot { color:#9FB2C0; }
+
+  /* S3 why */
+  .s3 { background: linear-gradient(160deg, #07182E 0%, #0B2E4A 100%); }
+  .s3 .top { position: absolute; top: 60px; left: 70px; }
+  .s3 .title { position: absolute; top: 200px; left: 70px; right: 70px; font-size: 60px; font-weight: 800; color: #fff; line-height:1.25; }
+  .s3 .title .accent { color: #3FE0D0; }
+  .s3 .rows { position: absolute; top: 400px; left: 70px; right: 70px; }
+  .s3 .row { display:flex; gap: 16px; margin-bottom: 30px; align-items:flex-start; }
+  .s3 .row .b { flex:0 0 auto; width: 14px; height:14px; border-radius:4px; background:#3FE0D0; margin-top:10px; }
+  .s3 .row .rt { font-size: 27px; font-weight: 700; color:#fff; }
+  .s3 .row .rd { font-size: 22px; color: rgba(255,255,255,.72); margin-top:5px; line-height:1.5; }
+  .s3 .punch { position: absolute; bottom: 170px; left: 70px; right: 70px; background: rgba(63,224,208,.12); border:1px solid rgba(63,224,208,.35); border-radius: 16px; padding: 24px 28px; font-size: 24px; line-height:1.5; color:#fff; font-weight:600; }
+  .s3 .punch .hl { color:#3FE0D0; font-weight:800; }
+
+  /* S4 internship (light) */
+  .s4 { background: #F4F7FA; }
+  .s4 .top { position: absolute; top: 60px; left: 70px; }
+  .s4 .wordmark { color: #0A1F3D; }
+  .s4 .tag { color: #5A7184; }
+  .s4 .title { position: absolute; top: 190px; left: 70px; right: 70px; font-size: 56px; font-weight: 800; color: #0A1F3D; line-height:1.25; }
+  .s4 .title .accent { color: #E0563F; }
+  .icards { position: absolute; top: 380px; left: 70px; right: 70px; display:flex; flex-direction:column; gap: 24px; }
+  .icard { background:#fff; border-radius: 20px; padding: 26px 32px; border:1px solid #E4EBF1; box-shadow:0 10px 30px rgba(10,31,61,.06); display:flex; gap:22px; align-items:flex-start; }
+  .icard .no { flex:0 0 auto; font-size: 40px; font-weight: 800; color:#3FE0D0; line-height:1; }
+  .icard .t { font-size: 28px; font-weight: 800; color:#0A1F3D; }
+  .icard .d { font-size: 22px; color:#5A7184; margin-top:8px; line-height:1.5; }
+  .s4 .note { position: absolute; bottom: 150px; left: 70px; right: 70px; font-size: 23px; color:#5A7184; line-height:1.5; }
+  .s4 .note b { color:#0A1F3D; }
+  .s4 .foot { color:#9FB2C0; }
+
+  /* S5 insight */
+  .s5 { background: linear-gradient(160deg, #0E6E7E 0%, #0B2E4A 60%, #07182E 100%); }
+  .s5 .top { position: absolute; top: 60px; left: 70px; }
+  .s5 .title { position: absolute; top: 200px; left: 70px; right: 70px; font-size: 58px; font-weight: 800; color: #fff; line-height:1.28; }
+  .s5 .title .accent { color: #FFB199; }
+  .s5 .rows { position: absolute; top: 460px; left: 70px; right: 70px; }
+  .s5 .row { display:flex; gap: 16px; margin-bottom: 28px; align-items:flex-start; }
+  .s5 .row .b { flex:0 0 auto; width: 14px; height:14px; border-radius:4px; background:#FFB199; margin-top:10px; }
+  .s5 .row .rt { font-size: 27px; font-weight: 700; color:#fff; }
+  .s5 .row .rd { font-size: 22px; color: rgba(255,255,255,.72); margin-top:5px; line-height:1.5; }
+  .s5 .punch { position: absolute; bottom: 180px; left: 70px; right: 70px; background: rgba(255,177,153,.12); border:1px solid rgba(255,177,153,.4); border-radius: 16px; padding: 26px 30px; font-size: 26px; line-height:1.5; color:#fff; font-weight:600; }
+  .s5 .punch .hl { color:#FFB199; font-weight:800; }
+
+  /* S6 actions + cta */
+  .s6 { background: linear-gradient(150deg, #0E6E7E 0%, #0B2E4A 70%, #07182E 100%); }
+  .s6 .top { position: absolute; top: 60px; left: 70px; }
+  .s6 .title { position: absolute; top: 190px; left: 70px; right: 70px; font-size: 58px; font-weight: 800; color: #fff; line-height:1.25; }
+  .s6 .title .accent { color: #3FE0D0; }
+  .s6 .actions { position: absolute; top: 350px; left: 70px; right: 70px; }
+  .s6 .act { display:flex; gap: 18px; margin-bottom: 24px; align-items:flex-start; }
+  .s6 .act .n { flex:0 0 auto; width: 44px; height:44px; border-radius: 50%; background: rgba(63,224,208,.18); color:#3FE0D0; font-size:24px; font-weight:800; display:flex; align-items:center; justify-content:center; }
+  .s6 .act .at { font-size: 25px; font-weight: 700; color:#fff; line-height:1.4; }
+  .s6 .ctabox { position: absolute; bottom: 160px; left: 70px; right: 70px; background: rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25); border-radius:20px; padding: 26px 32px; }
+  .s6 .ctabox .l1 { font-size: 23px; font-weight: 700; color:#fff; }
+  .s6 .ctabox .l2 { font-size: 28px; font-weight: 800; color:#3FE0D0; margin-top:8px; letter-spacing:1px; }
+  .s6 .handle { position: absolute; bottom: 60px; left: 70px; font-size: 23px; color:#fff; font-weight:700; }
+</style>
+</head>
+<body>
+
+  <!-- S1 Cover -->
+  <div class="slide s1">
+    <div class="top"><div class="wordmark">KOL<span class="dot">AGENCY</span></div><div class="tag">Global Influencer Marketing</div></div>
+    <div class="hl">品牌方最缺的，<br>不是投放，<br>是 <span class="accent">GTM。</span></div>
+    <div class="sub">我在 KOL agency 干了一年，每天对接甲方。<br>这是我看清的一个真相。</div>
+    <div class="chips"><span class="chip">GTM 是什么</span><span class="chip">为什么高薪</span><span class="chip">怎么入行</span></div>
+    <div class="foot">KOL AGENCY · SLIDE 1 / 6</div>
+  </div>
+
+  <!-- S2 What is GTM -->
+  <div class="slide s2">
+    <div class="top"><div class="wordmark">KOL<span style="color:#0E8FA0">AGENCY</span></div><div class="tag">What is GTM</div></div>
+    <div class="title">产品做出来之后，<br>谁把它<span class="accent">卖爆</span>？</div>
+    <div class="vcards">
+      <div class="vcard"><div class="who">产品经理</div><div class="what">把产品「<span class="accent">做出来</span>」</div></div>
+      <div class="vcard"><div class="who">GTM（Go To Market）</div><div class="what">把产品「卖爆、做火、<br>做出声量」</div></div>
+    </div>
+    <div class="bottom">定价、卖点、传播、渠道、库存——<br><b>新品上市的每一步，都是 GTM 在牵头。</b></div>
+    <div class="foot">KOL AGENCY · SLIDE 2 / 6</div>
+  </div>
+
+  <!-- S3 Why high salary -->
+  <div class="slide s3">
+    <div class="top"><div class="wordmark">KOL<span class="dot">AGENCY</span></div><div class="tag">Why it pays</div></div>
+    <div class="title">为什么这个岗位<br><span class="accent">薪资高</span>？</div>
+    <div class="rows">
+      <div class="row"><div class="b"></div><div><div class="rt">稀缺</div><div class="rd">会做执行的人一大把；能操盘一个新品从 0 到上市打爆的人，极少。</div></div></div>
+      <div class="row"><div class="b"></div><div><div class="rt">直接对结果负责</div><div class="rd">销量、声量、渠道转化，数字摆在台面上——扛结果的岗位，天花板都高。</div></div></div>
+    </div>
+    <div class="punch">所以大厂 / 出海企业愿意给应届生 <span class="hl">15-25k</span> 起薪——不是玄学，是真的缺人。</div>
+    <div class="foot">KOL AGENCY · SLIDE 3 / 6</div>
+  </div>
+
+  <!-- S4 Internship path -->
+  <div class="slide s4">
+    <div class="top"><div class="wordmark">KOL<span style="color:#0E8FA0">AGENCY</span></div><div class="tag">How to get in</div></div>
+    <div class="title">不卡专业，<br>卡的是<span class="accent">实习匹配度</span></div>
+    <div class="icards">
+      <div class="icard"><div class="no">1</div><div><div class="t">产品策划 / 产品营销实习</div><div class="d">优先级最高。攒新品调研、需求梳理、项目评审的经验——这是简历最硬的加分项。</div></div></div>
+      <div class="icard"><div class="no">2</div><div><div class="t">甲方品牌 / 市场营销实习</div><div class="d">优先选智能硬件、跨境出海企业。攒传播策划、产品声量打造的经验。</div></div></div>
+    </div>
+    <div class="note"><b>两段配齐，满足绝大多数企业 GTM 校招要求。</b>我自己就是「乙方投放 → 甲方品牌」走过来的，这段路径是转 GTM 最直接的跳板。</div>
+    <div class="foot">KOL AGENCY · SLIDE 4 / 6</div>
+  </div>
+
+  <!-- S5 Unique insight -->
+  <div class="slide s5">
+    <div class="top"><div class="wordmark">KOL<span class="dot">AGENCY</span></div><div class="tag">The underrated edge</div></div>
+    <div class="title">大多数人<br>没意识到的<span class="accent">加分项</span></div>
+    <div class="rows">
+      <div class="row"><div class="b"></div><div><div class="rt">达人营销已是 GTM 的标配打法</div><div class="rd">新品上市要造势，KOL 投放是最高效的放大器之一。</div></div></div>
+      <div class="row"><div class="b"></div><div><div class="rt">但大部分 GTM 不懂达人生态</div><div class="rd">不会辨数据真假、不懂建联节奏、看不懂投放复盘。</div></div></div>
+    </div>
+    <div class="punch">你懂，你就比同龄人<span class="hl">多一张牌</span>。</div>
+    <div class="foot">KOL AGENCY · SLIDE 5 / 6</div>
+  </div>
+
+  <!-- S6 Actions + CTA -->
+  <div class="slide s6">
+    <div class="top"><div class="wordmark">KOL<span class="dot">AGENCY</span></div><div class="tag">Start here</div></div>
+    <div class="title">给应届生的<br><span class="accent">3 个动作</span></div>
+    <div class="actions">
+      <div class="act"><div class="n">1</div><div class="at">先攒一段产品策划实习——这是入场券</div></div>
+      <div class="act"><div class="n">2</div><div class="at">甲方品牌实习，优先智能硬件 / 跨境出海方向</div></div>
+      <div class="act"><div class="n">3</div><div class="at">花一周入门达人营销：辨数据真假、看投放复盘</div></div>
+    </div>
+    <div class="ctabox"><div class="l1">📎 完整 media kit & creator network</div><div class="l2">your-agency.media</div></div>
+    <div class="handle">@your.agency · DM us anytime 🙌</div>
+    <div class="foot">KOL AGENCY · SLIDE 6 / 6</div>
+  </div>
+
+</body>
+</html>

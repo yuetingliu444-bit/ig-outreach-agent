@@ -1,0 +1,24 @@
+{
+  "brand_name": "（填你的品牌名）",
+  "brand_intro": "（1-2 句品牌介绍，写给 KOL 看的，别写公司口径）",
+  "product_lines": ["（主推产品 1）", "（主推产品 2）"],
+  "target_regions": ["North America", "Southeast Asia"],
+  "target_categories": ["（目标内容品类，如 tech reviewer / mom blogger / outdoor）"],
+  "collab_types": ["paid sponsorship", "product seeding", "affiliate"],
+  "budget_hint": "（不填也行。首条不建议提具体金额）",
+
+  "sender": {
+    "name": "Sophia",
+    "title": "Partnerships",
+    "company": "（公司名）"
+  },
+
+  "cta": "Open to a quick chat this week?",
+  "tone": "friendly, short, specific — sound like a human, not a template",
+  "do_not_say": [
+    "不要在首条发外链",
+    "不要承诺最低价或独家",
+    "不要用 Dear Sir / We are a leading company 这类模板腔"
+  ],
+  "proof_points": ["（可写的背书，如合作过的品牌、出货量、媒体报道）"]
+}

@@ -1,0 +1,32 @@
+{
+  "_note": "话术模板（脱敏版）。真实客户名单与机构签名请勿提交到公开仓库——复制本文件为 pitch.json，填入你自己的内容后本地使用。pitch_mode=verbatim 时原样发送；=optimized 时在前面加个性化开头，链接挪到对方回复后再给。",
+
+  "pitch_en": "We're a global influencer-marketing agency with a KOL network across the US, Europe, Southeast Asia, Japan, South Korea, and Hong Kong.\n\nI see you may have overseas influencer needs — would love to explore a collaboration.\n\nWe specialize in overseas influencer marketing, with a strong creator network across North America, Europe, Southeast Asia, and Hong Kong.\n\nBrands we've worked with: [Brand A], [Brand B], [Brand C].",
+  "cta_en": "If you're interested, let's talk!",
+
+  "pitch_zh": "我们是全球网红营销机构，拥有美国、欧洲、东南亚、日韩、港澳等地区的 KOL 资源。\n\n看您这边有海外红人的需求，想和您聊聊这方面的合作空间。\n\n海外网红营销 —— 专注海外各地区 KOL，主要覆盖：北美、欧洲、东南亚、港澳。\n\n服务案例：[品牌A]、[品牌B]、[品牌C]",
+  "cta_zh": "感兴趣的话，我们可以沟通合作呀！",
+
+  "openers_en": [
+    "Hi {name}, been following what you're building —",
+    "Hi {name}, your recent launch caught my eye —",
+    "Hi {name}, love the direction you're heading with the brand —",
+    "Hi {name}, came across your page and had to reach out —",
+    "Hi {name}, been lurking on your content for a while —"
+  ],
+  "openers_zh": [
+    "{name} 你好，关注你们品牌一段时间了 ——",
+    "{name} 你好，看到你们最近的新品 ——",
+    "{name} 你好，一直在看你们的出海动作 ——"
+  ],
+
+  "link_label": "Full media kit & creator network",
+  "link": "https://your-media-kit.example.com",
+  "signature": "Your Agency — Global Influencer Marketing & Brand Going-Global",
+
+  "second_message_en": "Here's our full media kit & creator network 👇\n{link}",
+  "second_message_zh": "这是我们的 media kit 和达人资源库 👇\n{link}",
+
+  "second_touch_en": "Thanks for getting back, {name}! 🙌\n\nHere's our full media kit & creator network 👇\n{link}\n\nWe can shortlist a few creators for your market — just tell me which region you're prioritizing and I'll pull options this week.",
+  "second_touch_zh": "感谢回复，{name}！🙌\n\n这是我们的 media kit 和达人资源库 👇\n{link}\n\n可以按你的目标市场先筛几个对口达人——告诉我你优先打哪个地区，我这周就把名单整理给你。"
+}

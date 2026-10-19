@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", Helvetica, Arial, sans-serif;
+    background: #111; display: flex; gap: 24px; flex-wrap: wrap; padding: 24px;
+  }
+  .slide { width: 1080px; height: 1350px; position: relative; overflow: hidden; flex: 0 0 auto; }
+  .wordmark { font-weight: 800; letter-spacing: 4px; font-size: 30px; color: #fff; }
+  .wordmark .dot { color: #18BFD4; }
+  .tag { font-size: 15px; letter-spacing: 3px; color: rgba(255,255,255,.65); text-transform: uppercase; font-weight: 600; margin-top: 6px; }
+  .foot { position: absolute; bottom: 38px; left: 0; right: 0; text-align: center; font-size: 15px; letter-spacing: 2px; color: rgba(255,255,255,.45); }
+  .stepnum { font-size: 200px; font-weight: 800; line-height: 1; color: rgba(63,224,208,.16); position: absolute; }
+  .badge { display:inline-block; padding: 8px 16px; border-radius: 999px; background: rgba(63,224,208,.15); color:#3FE0D0; font-size: 18px; font-weight: 700; letter-spacing:1px; }
+
+  /* S1 cover */
+  .s1 { background: linear-gradient(150deg, #07182E 0%, #0B2E4A 45%, #0E6E7E 100%); }
+  .s1 .top { position: absolute; top: 60px; left: 70px; }
+  .s1 .hl { position: absolute; top: 380px; left: 70px; right: 70px; font-size: 80px; line-height: 1.12; font-weight: 800; color: #fff; }
+  .s1 .hl .accent { color: #3FE0D0; }
+  .s1 .sub { position: absolute; top: 800px; left: 70px; right: 70px; font-size: 28px; line-height: 1.5; color: rgba(255,255,255,.8); font-weight: 500; }
+  .s1 .chips { position: absolute; bottom: 110px; left: 70px; right: 70px; display:flex; gap:12px; flex-wrap:wrap; }
+  .s1 .chip { padding: 9px 18px; border-radius: 999px; font-size: 18px; font-weight: 600; background: rgba(255,255,255,.12); color:#fff; border:1px solid rgba(255,255,255,.25); }
+
+  /* S2 myth */
+  .s2 { background: #F4F7FA; }
+  .s2 .top { position: absolute; top: 60px; left: 70px; }
+  .s2 .wordmark { color: #0A1F3D; }
+  .s2 .tag { color: #5A7184; }
+  .s2 .title { position: absolute; top: 190px; left: 70px; right: 70px; font-size: 60px; font-weight: 800; color: #0A1F3D; }
+  .s2 .title .accent { color: #E0563F; }
+  .mcards { position: absolute; top: 350px; left: 70px; right: 70px; display:flex; flex-direction:column; gap: 20px; }
+  .mcard { background:#fff; border-radius: 20px; padding: 26px 30px; border:1px solid #E4EBF1; box-shadow:0 10px 30px rgba(10,31,61,.06); display:flex; gap:20px; align-items:flex-start; }
+  .mcard .x { font-size:30px; font-weight:800; color:#E0563F; flex:0 0 auto; }
+  .mcard .t { font-size: 26px; font-weight: 700; color:#0A1F3D; }
+  .mcard .d { font-size: 21px; color:#5A7184; margin-top:6px; line-height:1.45; }
+
+  /* S3-S5 phase */
+  .sp { background: linear-gradient(160deg, #07182E 0%, #0B2E4A 100%); }
+  .sp .top { position: absolute; top: 60px; left: 70px; }
+  .sp .num { position: absolute; top: 230px; right: 50px; font-size: 300px; font-weight: 800; color: rgba(63,224,208,.13); line-height:1; }
+  .sp .ptitle { position: absolute; top: 270px; left: 70px; right: 70px; font-size: 56px; font-weight: 800; color: #fff; }
+  .sp .ptitle .accent { color: #3FE0D0; }
+  .sp .pbody { position: absolute; top: 470px; left: 70px; right: 70px; }
+  .sp .row { display:flex; gap: 16px; margin-bottom: 22px; align-items:flex-start; }
+  .sp .row .b { flex:0 0 auto; width: 14px; height:14px; border-radius:4px; background:#3FE0D0; margin-top:10px; }
+  .sp .row .rt { font-size: 27px; font-weight: 700; color:#fff; }
+  .sp .row .rd { font-size: 22px; color: rgba(255,255,255,.72); margin-top:5px; line-height:1.45; }
+
+  /* S6 cta */
+  .s6 { background: linear-gradient(150deg, #0E6E7E 0%, #0B2E4A 70%, #07182E 100%); }
+  .s6 .top { position: absolute; top: 60px; left: 70px; }
+  .s6 .big { position: absolute; top: 330px; left: 70px; right: 70px; font-size: 66px; line-height: 1.12; font-weight: 800; color: #fff; }
+  .s6 .big .accent { color: #FFB199; }
+  .s6 .mid { position: absolute; top: 660px; left: 70px; right: 70px; font-size: 28px; color: rgba(255,255,255,.85); font-weight:500; line-height:1.5; }
+  .s6 .ctabox { position: absolute; bottom: 160px; left: 70px; right: 70px; background: rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25); border-radius:20px; padding: 30px 34px; }
+  .s6 .ctabox .l1 { font-size: 24px; font-weight: 700; color:#fff; }
+  .s6 .ctabox .l2 { font-size: 30px; font-weight: 800; color:#3FE0D0; margin-top:8px; letter-spacing:1px; }
+  .s6 .handle { position: absolute; bottom: 60px; left: 70px; font-size: 24px; color:#fff; font-weight:700; }
+</style>
+</head>
+<body>
+
+  <!-- S1 Cover -->
+  <div class="slide s1">
+    <div class="top"><div class="wordmark">KOL<span class="dot">AGENCY</span></div><div class="tag">Global Influencer Marketing</div></div>
+    <div class="hl">出海做 KOL，<br>钱到底该<span class="accent">花在哪</span>？</div>
+    <div class="sub">我们跑过上百个海外 Campaign，把经验压成 4 个阶段——帮你少走弯路、把预算花在能转化的地方。</div>
+    <div class="chips"><span class="chip">选市场</span><span class="chip">找对人</span><span class="chip">本地化</span><span class="chip">测 & 放大</span></div>
+    <div class="foot">KOL AGENCY · SLIDE 1 / 6</div>
+  </div>
+
+  <!-- S2 Myths -->
+  <div class="slide s2">
+    <div class="top"><div class="wordmark">KOL<span style="color:#0E8FA0">AGENCY</span></div><div class="tag">Common mistakes</div></div>
+    <div class="title">三个<span class="accent">常见误区</span></div>
+    <div class="mcards">
+      <div class="mcard"><div class="x">✕</div><div><div class="t">粉丝越多越好</div><div class="d">1 万粉的垂直博主，常比 100 万粉的泛娱乐号转化高数倍——匹配度才是关键。</div></div></div>
+      <div class="mcard"><div class="x">✕</div><div><div class="t">中文素材翻译一下就行</div><div class="d">本地表达、本地梗、本地节奏，才是打动当地用户的东西。翻译稿没人爱看。</div></div></div>
+      <div class="mcard"><div class="x">✕</div><div><div class="t">一发就爆</div><div class="d">先小预算多组测试，再用数据放大。靠运气赌爆款，烧的是你的真金白银。</div></div></div>
+    </div>
+    <div class="foot" style="color:#9FB2C0">KOL AGENCY · SLIDE 2 / 6</div>
+  </div>
+
+  <!-- S3 Phase 1 -->
+  <div class="slide sp">
+    <div class="top"><div class="wordmark">KOL<span class="dot">AGENCY</span></div><div class="tag">Phase 01</div></div>
+    <div class="num">01</div>
+    <div class="ptitle">选市场 <span class="accent">& 定目标</span></div>
+    <div class="pbody">
+      <div class="row"><div class="b"></div><div><div class="rt">先打 1–2 个核心市场</div><div class="rd">别一上来全撒。集中资源在一个市场跑通模型，再复制。</div></div></div>
+      <div class="row"><div class="b"></div><div><div class="rt">目标要具体</div><div class="rd">是冲认知、引流量，还是直接转化？目标不同，达人组合完全不同。</div></div></div>
+      <div class="row"><div class="b"></div><div><div class="rt">摸清当地 KOL 生态</div><div class="rd">每个平台的达人结构、报价、玩法都不一样，先用数据摸底。</div></div></div>
+    </div>
+    <div class="foot">KOL AGENCY · SLIDE 3 / 6</div>
+  </div>
+
+  <!-- S4 Phase 2 -->
+  <div class="slide sp">
+    <div class="top"><div class="wordmark">KOL<span class="dot">AGENCY</span></div><div class="tag">Phase 02</div></div>
+    <div class="num">02</div>
+    <div class="ptitle">找<span class="accent">对的人</span></div>
+    <div class="pbody">
+      <div class="row"><div class="b"></div><div><div class="rt">匹配度 > 粉丝量</div><div class="rd">受众重合度、内容调性契合，比一个数字重要得多。</div></div></div>
+      <div class="row"><div class="b"></div><div><div class="rt">看互动率 & 评论质量</div><div class="rd">刷量账号一查就露馅。真实评论里才有购买意向。</div></div></div>
+      <div class="row"><div class="b"></div><div><div class="rt">分层组合</div><div class="rd">头部造势 + 腰部种草 + 尾部铺量，预算效率最高。</div></div></div>
+    </div>
+    <div class="foot">KOL AGENCY · SLIDE 4 / 6</div>
+  </div>
+
+  <!-- S5 Phase 3+4 -->
+  <div class="slide sp">
+    <div class="top"><div class="wordmark">KOL<span class="dot">AGENCY</span></div><div class="tag">Phase 03 & 04</div></div>
+    <div class="num">03</div>
+    <div class="ptitle">本地化 <span class="accent">& 测放大</span></div>
+    <div class="pbody">
+      <div class="row"><div class="b"></div><div><div class="rt">内容不是翻译，是重做</div><div class="rd">让 creator 用母语、用自己的方式讲——观众才信。</div></div></div>
+      <div class="row"><div class="b"></div><div><div class="rt">小预算多组测试</div><div class="rd">同市场测不同达人 / 钩子 / 形式，留下数据。</div></div></div>
+      <div class="row"><div class="b"></div><div><div class="rt">跑出 ROI 再放大</div><div class="rd">把预算压给验证过的组合，而不是平均撒。</div></div></div>
+    </div>
+    <div class="foot">KOL AGENCY · SLIDE 5 / 6</div>
+  </div>
+
+  <!-- S6 CTA -->
+  <div class="slide s6">
+    <div class="top"><div class="wordmark">KOL<span class="dot">AGENCY</span></div><div class="tag">Let's talk</div></div>
+    <div class="big">这 4 步，<br><span class="accent">我们帮你跑通。</span></div>
+    <div class="mid">六大区域本土达人 + 从选市场到放大的全链路执行。你出品牌，我们出打法。</div>
+    <div class="ctabox"><div class="l1">📎 完整 media kit & creator network</div><div class="l2">your-agency.media</div></div>
+    <div class="handle">@your.agency · DM us anytime 🙌</div>
+    <div class="foot">KOL AGENCY · SLIDE 6 / 6</div>
+  </div>
+
+</body>
+</html>

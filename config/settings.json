@@ -1,0 +1,69 @@
+{
+  "account": {
+    "username": "",
+    "profile_dir": "data/profile",
+    "warmup_start_date": null
+  },
+
+  "browser": {
+    "mode": "playwright",
+    "cdp_port": 9222,
+    "headless": false,
+    "slow_mo_ms": 120,
+    "locale": "auto",
+    "timezone": "auto",
+    "viewport_width": 1440,
+    "viewport_height": 900
+  },
+
+  "safety": {
+    "daily_cap": 35,
+    "hourly_cap": 6,
+    "min_interval_sec": 240,
+    "max_interval_sec": 720,
+    "active_hours": { "start": 9, "end": 21 },
+    "active_days": [0, 1, 2, 3, 4, 5, 6],
+    "warmup_days": 7,
+    "warmup_daily_cap": 8,
+    "max_consecutive_failures": 3,
+    "cooldown_after_block_hours": 24,
+    "first_message_no_links": true,
+    "max_similarity_to_recent": 0.72
+  },
+
+  "discovery": {
+    "hashtags": [],
+    "keywords": [],
+    "competitors": [],
+    "max_per_source": 60,
+    "scroll_rounds": 6
+  },
+
+  "qualify": {
+    "target_type": "brand",
+    "min_followers": 1000,
+    "max_followers": 50000000,
+    "min_score": 45,
+    "category_keywords": ["充电", "音频", "配件", "扫地机器人", "清洁", "安防", "运动相机", "无人机", "运动耳机", "潮玩", "百货", "彩妆", "个护", "美妆", "服饰", "快时尚", "游戏", "储能", "电源", "耳机", "音箱", "智能", "硬件", "消费电子", "fashion", "beauty", "cosmetics", "makeup", "skincare", "audio", "charger", "charging", "earphone", "earbuds", "headphone", "speaker", "smart home", "robot vacuum", "vacuum", "camera", "action camera", "drone", "toy", "toys", "accessories", "consumer electronics", "tech", "gadget", "outdoor", "home appliance"],
+    "region_keywords": ["北美", "欧洲", "东南亚", "日本", "韩国", "全球", "海外", "出海", "跨境", "worldwide", "global"],
+    "must_have_email_first": false
+  },
+
+  "llm": {
+    "enabled": false,
+    "base_url": "https://api.openai.com/v1",
+    "model": "gpt-4o-mini",
+    "api_key_env": "OPENAI_API_KEY"
+  },
+
+  "outreach": {
+    "follow_up_enabled": true,
+    "follow_up_after_days": 4,
+    "max_follow_ups": 1,
+
+    "pitch_mode": "optimized",
+    "link_in_first_message": false,
+    "media_kit_on_reply": false,
+    "pitch_lang": "auto"
+  }
+}

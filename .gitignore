@@ -1,0 +1,44 @@
+# ==== 本地运行数据：登录态 profile、SQLite 数据库、导出文件、运行状态 ====
+# 这些包含「IG 账号登录凭证」+「公司运营数据」，绝不能进版本库 / 上传 GitHub
+data/
+
+# ==== 公司商务资产：真实话术（含客户案例清单）+ 真实找人目标 ====
+# 公开仓库里用 *.example.json 模板替代，真实内容只留在本地
+config/pitch.json
+config/targets.json
+# 注：brand.json / settings.json 是占位模板、无凭证，可以进仓库
+
+# ==== 品牌名单种子文件：含真实 handle + 官网 + BD 对口理由（商业情报）====
+# 公开仓库里用 tools/import_brands.example.py 展示代码结构即可
+tools/build_brand_list.py
+tools/import_brands.py
+tools/import_shenzhen_brands.py
+tools/import_day2_brands.py
+tools/import_day3_brands.py
+
+# ==== 分批载入/探查候选脚本：内嵌真实候选名单 + 英文话术（商业情报）====
+load_batch_b.py
+load_batch_c.py
+load_new_batch.py
+probe_new_batch.py
+reverify_failed.py
+
+# ==== 飞书：本地凭证（真实 token 只留本地）+ 授权二维码 + 同步产物 ====
+config/feishu.local.json
+feishu_auth_qr*.png
+tblkDlmpm5j98E4n_*
+
+# ==== 本地工作区元数据 / 临时调试脚本 ====
+.workbuddy/
+_check_login.py
+
+# ==== 生成的建联看板：含真实品牌 handle 名单（由 run.py dashboard 生成）====
+# 这是私有运营视图，绝不入库 / 上传；公开仓库用 README 说明如何本地生成
+dashboard/
+
+# ==== 日志与缓存 ====
+render.log
+*.log
+__pycache__/
+*.pyc
+.DS_Store

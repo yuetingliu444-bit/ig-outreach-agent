@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", Helvetica, Arial, sans-serif;
+    background: #111; display: flex; gap: 24px; flex-wrap: wrap; padding: 24px;
+  }
+  .slide {
+    width: 1080px; height: 1350px; position: relative; overflow: hidden;
+    flex: 0 0 auto;
+  }
+  .wordmark {
+    font-weight: 800; letter-spacing: 4px; font-size: 30px; color: #ffffff;
+  }
+  .wordmark .dot { color: #18BFD4; }
+  .tag {
+    font-size: 15px; letter-spacing: 3px; color: rgba(255,255,255,.65);
+    text-transform: uppercase; font-weight: 600; margin-top: 6px;
+  }
+  .foot {
+    position: absolute; bottom: 38px; left: 0; right: 0; text-align: center;
+    font-size: 15px; letter-spacing: 2px; color: rgba(255,255,255,.45);
+  }
+  .chiprow { display: flex; gap: 12px; flex-wrap: wrap; }
+  .chip {
+    padding: 10px 18px; border-radius: 999px; font-size: 18px; font-weight: 600;
+    background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.25);
+  }
+
+  /* Slide 1 */
+  .s1 { background: linear-gradient(150deg, #07182E 0%, #0B2E4A 45%, #0E6E7E 100%); }
+  .s1 .top { position: absolute; top: 60px; left: 70px; }
+  .s1 .hl {
+    position: absolute; top: 340px; left: 70px; right: 70px;
+    font-size: 72px; line-height: 1.1; font-weight: 800; color: #fff;
+  }
+  .s1 .hl .accent { color: #3FE0D0; }
+  .s1 .sub {
+    position: absolute; top: 660px; left: 70px; right: 70px;
+    font-size: 28px; line-height: 1.5; color: rgba(255,255,255,.78); font-weight: 500;
+  }
+  .s1 .chips { position: absolute; bottom: 100px; left: 70px; right: 70px; }
+
+  /* Slide 2 */
+  .s2 { background: #F4F7FA; }
+  .s2 .top { position: absolute; top: 60px; left: 70px; }
+  .s2 .wordmark { color: #0A1F3D; }
+  .s2 .tag { color: #5A7184; }
+  .s2 .title {
+    position: absolute; top: 200px; left: 70px; right: 70px;
+    font-size: 64px; font-weight: 800; color: #0A1F3D; line-height: 1.1;
+  }
+  .s2 .title .accent { color: #0E8FA0; }
+  .grid {
+    position: absolute; top: 430px; left: 70px; right: 70px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 22px;
+  }
+  .card {
+    background: #fff; border-radius: 22px; padding: 32px 30px;
+    border: 1px solid #E4EBF1; box-shadow: 0 10px 30px rgba(10,31,61,.06);
+  }
+  .card .rn { font-size: 30px; font-weight: 800; color: #0A1F3D; }
+  .card .ct { font-size: 20px; color: #5A7184; margin-top: 6px; font-weight: 600; }
+  .card .bar { height: 6px; border-radius: 6px; background: #E4EBF1; margin-top: 18px; overflow: hidden; }
+  .card .bar i { display: block; height: 100%; background: linear-gradient(90deg,#0E8FA0,#3FE0D0); }
+  .s2 .note { position: absolute; bottom: 56px; left: 70px; right: 70px; font-size: 18px; color: #8AA0B0; }
+
+  /* Slide 3 */
+  .s3 { background: linear-gradient(160deg, #07182E 0%, #0B2E4A 100%); }
+  .s3 .top { position: absolute; top: 60px; left: 70px; }
+  .s3 .title {
+    position: absolute; top: 200px; left: 70px; right: 70px;
+    font-size: 58px; font-weight: 800; color: #fff; line-height: 1.12;
+  }
+  .s3 .title .accent { color: #3FE0D0; }
+  .brands {
+    position: absolute; top: 430px; left: 70px; right: 70px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;
+  }
+  .b {
+    background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.16);
+    border-radius: 18px; height: 120px; display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 700; color: #fff; text-align: center; padding: 8px;
+  }
+  .s3 .note { position: absolute; bottom: 56px; left: 70px; right: 70px; font-size: 19px; color: rgba(255,255,255,.6); }
+
+  /* Slide 4 */
+  .s4 { background: linear-gradient(150deg, #0E6E7E 0%, #0B2E4A 70%, #07182E 100%); }
+  .s4 .top { position: absolute; top: 60px; left: 70px; }
+  .s4 .big {
+    position: absolute; top: 320px; left: 70px; right: 70px;
+    font-size: 72px; line-height: 1.08; font-weight: 800; color: #fff;
+  }
+  .s4 .big .accent { color: #FFB199; }
+  .s4 .mid {
+    position: absolute; top: 620px; left: 70px; right: 70px;
+    font-size: 30px; color: rgba(255,255,255,.85); font-weight: 500; line-height: 1.5;
+  }
+  .s4 .ctabox {
+    position: absolute; bottom: 150px; left: 70px; right: 70px;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.25);
+    border-radius: 20px; padding: 30px 34px;
+  }
+  .s4 .ctabox .l1 { font-size: 24px; font-weight: 700; color: #fff; }
+  .s4 .ctabox .l2 { font-size: 30px; font-weight: 800; color: #3FE0D0; margin-top: 8px; letter-spacing: 1px; }
+  .s4 .handle { position: absolute; bottom: 60px; left: 70px; font-size: 24px; color: #fff; font-weight: 700; }
+</style>
+</head>
+<body>
+
+  <!-- Slide 1: Cover -->
+  <div class="slide s1">
+    <div class="top">
+      <div class="wordmark">KOL<span class="dot">AGENCY</span></div>
+      <div class="tag">Global Influencer Marketing</div>
+    </div>
+    <div class="hl">Take your brand<br><span class="accent">global</span> — with creators<br>who actually convert.</div>
+    <div class="sub">Localized influencer campaigns across six regions — built for brands going overseas.</div>
+    <div class="chips chiprow">
+      <span class="chip">North America</span>
+      <span class="chip">Europe</span>
+      <span class="chip">Southeast Asia</span>
+      <span class="chip">Japan</span>
+      <span class="chip">South Korea</span>
+      <span class="chip">Hong Kong</span>
+    </div>
+    <div class="foot">KOL AGENCY · SLIDE 1 / 4</div>
+  </div>
+
+  <!-- Slide 2: Regions -->
+  <div class="slide s2">
+    <div class="top">
+      <div class="wordmark">KOL<span style="color:#0E8FA0">AGENCY</span></div>
+      <div class="tag">Our Network</div>
+    </div>
+    <div class="title">Six regions.<br><span class="accent">One network.</span></div>
+    <div class="grid">
+      <div class="card"><div class="rn">2,000+</div><div class="ct">North America</div><div class="bar"><i style="width:92%"></i></div></div>
+      <div class="card"><div class="rn">1,500+</div><div class="ct">Europe</div><div class="bar"><i style="width:75%"></i></div></div>
+      <div class="card"><div class="rn">3,000+</div><div class="ct">Southeast Asia</div><div class="bar"><i style="width:100%"></i></div></div>
+      <div class="card"><div class="rn">1,200+</div><div class="ct">Japan</div><div class="bar"><i style="width:60%"></i></div></div>
+      <div class="card"><div class="rn">900+</div><div class="ct">South Korea</div><div class="bar"><i style="width:48%"></i></div></div>
+      <div class="card"><div class="rn">600+</div><div class="ct">Hong Kong</div><div class="bar"><i style="width:38%"></i></div></div>
+    </div>
+    <div class="note">Vetted creators, by region. Full, filterable roster in our media kit.</div>
+    <div class="foot" style="color:#9FB2C0">KOL AGENCY · SLIDE 2 / 4</div>
+  </div>
+
+  <!-- Slide 3: Cases -->
+  <div class="slide s3">
+    <div class="top">
+      <div class="wordmark">KOL<span class="dot">AGENCY</span></div>
+      <div class="tag">Proof, not promises</div>
+    </div>
+    <div class="title">Brands we've helped<br><span class="accent">go global.</span></div>
+    <div class="brands">
+      <div class="b">Charging</div>
+      <div class="b">Toys</div>
+      <div class="b">Cameras</div>
+      <div class="b">Retail</div>
+      <div class="b">Beauty</div>
+      <div class="b">Commerce</div>
+      <div class="b">Appliances</div>
+      <div class="b">Accessories</div>
+    </div>
+    <div class="note">From electronics to beauty and toys — localized creator campaigns that landed.</div>
+    <div class="foot">KOL AGENCY · SLIDE 3 / 4</div>
+  </div>
+
+  <!-- Slide 4: CTA -->
+  <div class="slide s4">
+    <div class="top">
+      <div class="wordmark">KOL<span class="dot">AGENCY</span></div>
+      <div class="tag">Let's talk</div>
+    </div>
+    <div class="big">Let's build your<br><span class="accent">creator strategy.</span></div>
+    <div class="mid">Grab our full media kit & creator network — see exactly who we can put in front of your brand.</div>
+    <div class="ctabox">
+      <div class="l1">📎 Full media kit & creator network</div>
+      <div class="l2">your-agency.media</div>
+    </div>
+    <div class="handle">@your.agency · DM us anytime 🙌</div>
+    <div class="foot">KOL AGENCY · SLIDE 4 / 4</div>
+  </div>
+
+</body>
+</html>
