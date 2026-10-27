@@ -6,6 +6,7 @@ import time
 from . import selectors as sel
 from .browser import first_visible, human_pause
 from .copywriter import pick_lang
+from .report import classify_direction, export_tracker
 from .sender import send_dm
 
 
@@ -68,10 +69,13 @@ async def check_replies(session, store, cfg):
         base = lead.get("baseline_msgs") or 1
         if cnt > base:
             last = await _last_message(page)
-            store.update(u, status="replied", replied_at=time.time(), reply_snippet=last)
+            direction = classify_direction(last)
+            store.update(u, status="replied", replied_at=time.time(),
+                         reply_snippet=last, direction=direction)
             store.log(u, "replied", last[:200])
             found += 1
             print(f"  @{u} ✉ 有新回复：{last[:60]}")
+            print(f"       ↳ 回复方向自动判定：{direction}")
 
             if mk_on_reply and mk_link and not store.has_event(u, "media_kit"):
                 lang = pick_lang(lead, cfg)
@@ -90,4 +94,10 @@ async def check_replies(session, store, cfg):
         await asyncio.sleep(random.uniform(1.5, 2.5))
 
     print(f"[watch] 发现 {found} 个新回复\n")
+    if found:
+        try:
+            p = export_tracker(store)
+            print(f"[watch] 台账已刷新：{p}")
+        except Exception as e:
+            print(f"[watch] 台账刷新失败：{e}")
     return found

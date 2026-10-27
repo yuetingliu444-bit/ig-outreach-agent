@@ -144,7 +144,7 @@ def qualify(store, cfg) -> int:
         # 打分器只是用来过滤「自动抓取」的杂音 —— 对人工名单，
         # 粉丝数达标（≥1000，滤掉错账号/僵尸号）就直接放行，
         # 最终由看板人工复核兜底。
-        if (lead.get("source") in ("builtin_list", "shenzhen_builtin")
+        if (lead.get("source") in ("builtin_list", "shenzhen_builtin", "day2_brands")
                 and (lead.get("followers") or 0) >= 1000
                 and score < min_score):
             score = min_score

@@ -15,6 +15,35 @@ from . import selectors as sel
 
 EMAIL_RE = re.compile(r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
 
+# 社交线索：从简介/外链里抠出 WhatsApp / Telegram / Line / 微信 / TikTok 等联系方式
+SOCIAL_PATTERNS = [
+    ("WhatsApp", r"(?:wa\.me|chat\.whatsapp\.com|api\.whatsapp\.com)[^\s\"'<>]*"),
+    ("Telegram", r"(?:t\.me|telegram\.me)[^\s\"'<>]*"),
+    ("Line", r"(?:line\.me|lin\.ee)[^\s\"'<>]*"),
+    ("微信", r"(?:weixin|wechat)[^\s\"'<>]*"),
+    ("TikTok", r"tiktok\.com/[@\w\.\-]+"),
+    ("YouTube", r"youtube\.com/[@\w\.\-]+"),
+    ("Facebook", r"facebook\.com/[\w\.\-]+"),
+    ("X", r"(?:x\.com|twitter\.com)/[\w\.\-]+"),
+    ("LinkedIn", r"linkedin\.com/[\w\.\-]+"),
+    ("官网", r"(?:https?://)?(?:www\.)?[a-z0-9\-]+\.(?:com|cn|net|io|co)(?:/[^\s\"'<>]*)?"),
+]
+
+
+def extract_social_links(*texts: str) -> str:
+    """从若干段文本里抠出社交/联系线索，返回 "平台:线索 | 平台:线索" 字符串。"""
+    blob = " ".join(t for t in texts if t)
+    found = []
+    seen = set()
+    for name, pat in SOCIAL_PATTERNS:
+        for m in re.findall(pat, blob, flags=re.IGNORECASE):
+            link = m.strip(".,;:)(")
+            if not link or link.lower() in seen:
+                continue
+            seen.add(link.lower())
+            found.append(f"{name}:{link}")
+    return " | ".join(found[:8])
+
 # IG 的 og:description 语言随账号/浏览器语言变：
 #   英文：1,777 Followers, 370 Following, 144 Posts - ...
 #   中文：1,777 位粉丝、已关注 370 人、 144 篇帖子 - ...
@@ -138,6 +167,9 @@ async def enrich_one(page, username: str, fetch_link: bool = False) -> dict:
     except Exception:
         pass
     data["external_url"] = ext
+
+    # 社交线索：从简介 + 外链里抠 WhatsApp/Telegram/Line/TikTok 等
+    data["social_links"] = extract_social_links(bio, ext)
 
     data["is_business"] = 1 if (email or await _has_email_btn(page)) else 0
 

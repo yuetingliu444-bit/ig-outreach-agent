@@ -28,6 +28,9 @@ from src import onboarding, setup_server, board_server            # noqa: E402
 from src.safety import SafetyGuard         # noqa: E402
 from src.sender import run_followup, run_send  # noqa: E402
 from src.second_touch import run_second_touch  # noqa: E402
+from src.report import export_tracker      # noqa: E402
+from src.prospect import prospect          # noqa: E402
+from src.feishu_sync import sync as feishu_sync  # noqa: E402
 from src.store import Store                # noqa: E402
 from src.watcher import check_replies      # noqa: E402
 
@@ -206,6 +209,17 @@ async def cmd_watch(args, cfg, store):
     await s.stop()
 
 
+async def cmd_prospect(args, cfg, store):
+    """抓已发送账号的邮箱 + 社交线索（WhatsApp/Telegram/Line/TikTok 等）。"""
+    s = IGSession(cfg)
+    await s.start()
+    if not await need_login(s):
+        await s.stop()
+        return
+    await prospect(s, store, limit=args.limit)
+    await s.stop()
+
+
 async def cmd_pipeline(args, cfg, store):
     safety = SafetyGuard(cfg, DATA_DIR)
     s = IGSession(cfg)
@@ -227,6 +241,19 @@ async def cmd_pipeline(args, cfg, store):
 def cmd_dashboard(args, cfg, store):
     p = dashboard.render(store, Path(__file__).parent / "dashboard" / "index.html")
     print(f"看板已生成：{p}")
+
+
+def cmd_tracker(args, cfg, store):
+    """生成 / 刷新建联台账 Excel（明细 + 汇总 + 已发送去重名单）。"""
+    p = export_tracker(store)
+    print(f"建联台账已刷新：{p}")
+
+
+def cmd_feishu(args, cfg, store):
+    """把本地台账同步到飞书多维表格（增量：按 IG账号 匹配新增/更新）。"""
+    r = feishu_sync(store)
+    print(f"飞书同步完成：新增 {r.get('created', 0)}，更新 {r.get('updated', 0)}")
+    print(f"在线表格：{r.get('url')}")
 
 
 def cmd_status(args, cfg, store):
@@ -314,6 +341,10 @@ def main():
 
     sub.add_parser("watch").set_defaults(fn=cmd_watch, sync=False)
 
+    p = sub.add_parser("prospect")
+    p.add_argument("--limit", type=int, default=None)
+    p.set_defaults(fn=cmd_prospect, sync=False)
+
     p = sub.add_parser("second-touch")
     p.add_argument("--limit", type=int, default=None)
     p.add_argument("--dry-run", action="store_true")
@@ -341,6 +372,8 @@ def main():
 
     sub.add_parser("export").set_defaults(fn=cmd_export, sync=True)
     sub.add_parser("dashboard").set_defaults(fn=cmd_dashboard, sync=True)
+    sub.add_parser("tracker").set_defaults(fn=cmd_tracker, sync=True)
+    sub.add_parser("feishu").set_defaults(fn=cmd_feishu, sync=True)
     sub.add_parser("status").set_defaults(fn=cmd_status, sync=True)
     sub.add_parser("unfreeze").set_defaults(fn=cmd_unfreeze, sync=True)
 

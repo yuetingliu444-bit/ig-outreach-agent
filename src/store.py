@@ -68,6 +68,8 @@ MIGRATIONS = [
     ("intent", "TEXT"),
     ("second_touched_at", "REAL"),
     ("second_message", "TEXT"),
+    ("direction", "TEXT"),
+    ("social_links", "TEXT"),
 ]
 
 
@@ -144,6 +146,13 @@ class Store:
 
     def all(self) -> List[Dict[str, Any]]:
         return [dict(r) for r in self.conn.execute("SELECT * FROM leads").fetchall()]
+
+    def sent_usernames(self) -> set:
+        """所有已发送过的账号（去重名单）—— 下次发送前必须核对，绝不重复。"""
+        cur = self.conn.execute(
+            "SELECT username FROM leads WHERE status IN "
+            "('sent','replied','followed_up','second_touched')")
+        return {r[0] for r in cur.fetchall()}
 
     def has_event(self, username: str, kind: str) -> bool:
         cur = self.conn.execute(

@@ -8,7 +8,7 @@
   "browser": {
     "mode": "playwright",
     "cdp_port": 9222,
-    "headless": false,
+    "headless": true,
     "slow_mo_ms": 120,
     "locale": "auto",
     "timezone": "auto",

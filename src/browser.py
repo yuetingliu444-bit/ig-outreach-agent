@@ -17,6 +17,7 @@ import random
 import shutil
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 from playwright.async_api import async_playwright
@@ -42,6 +43,29 @@ async def first_visible(page, selectors, timeout=4000):
         except Exception:
             continue
     return None
+
+
+async def wait_any(page, selectors, timeout=15000, poll=600):
+    """在总时限内轮询多个选择器，任一可见即返回。
+
+    与 first_visible 的区别：first_visible 是「每个选择器各等一个完整超时」，
+    候选一多就会把总等待放大 N 倍（DM 输入框有 7 个候选，20s 会变 140s）。
+    这里共享一个 deadline，慢代理下不会假死。
+    """
+    if isinstance(selectors, str):
+        selectors = [selectors]
+    deadline = time.monotonic() + timeout / 1000
+    while True:
+        for s in selectors:
+            try:
+                loc = page.locator(s).first
+                if await loc.is_visible():
+                    return loc
+            except Exception:
+                continue
+        if time.monotonic() >= deadline:
+            return None
+        await asyncio.sleep(poll / 1000)
 
 
 async def human_type(page, text: str, min_delay=45, max_delay=140):
@@ -183,7 +207,26 @@ class IGSession:
         if tz and tz != "auto":
             kwargs["timezone_id"] = tz
 
-        self.context = await self.pw.chromium.launch_persistent_context(**kwargs)
+        # 代理：默认走系统代理；若设置 IG_PROXY 则显式钉死，
+        # 解决 iKuuuVPN(FlClash) 系统代理端口跳变 / 核心假死导致
+        # ERR_NETWORK_IO_SUSPENDED 的问题。
+        ig_proxy = os.environ.get("IG_PROXY")
+        if ig_proxy:
+            kwargs["proxy"] = {"server": ig_proxy}
+
+        # 启动偶发崩溃：浏览器进程刚拉起就被 kill（TargetClosedError）。
+        # 这种瞬时失败不应让整轮发送作废，这里做最多 3 次重试。
+        last_err = None
+        for attempt in range(1, 4):
+            try:
+                self.context = await self.pw.chromium.launch_persistent_context(**kwargs)
+                break
+            except Exception as e:  # TargetClosedError 等瞬时崩溃
+                last_err = e
+                print(f"  ⚠️ 浏览器启动第 {attempt} 次失败（{type(e).__name__}），{3*attempt}s 后重试…")
+                await asyncio.sleep(3 * attempt)
+        else:
+            raise last_err
         self.page = self.context.pages[0] if self.context.pages else await self.context.new_page()
         self._owns_browser = True
 
@@ -214,12 +257,22 @@ class IGSession:
     # -- 体检 ------------------------------------------------------
     async def health(self) -> tuple:
         """返回 (状态, 说明)。状态：ok / challenge / block / logged_out"""
-        try:
-            await self.page.goto("https://www.instagram.com/",
-                                 wait_until="domcontentloaded", timeout=30000)
-            await self.page.wait_for_timeout(4000)
-        except Exception as e:
-            return "logged_out", f"打开失败: {e}"
+        # 导航偶发中止（代理抖动 → ERR_ABORTED / ERR_NETWORK_IO_SUSPENDED）
+        # 不该被误判成登出。最多重试 3 次再下结论。
+        nav_ok = False
+        last_err = None
+        for _ in range(3):
+            try:
+                await self.page.goto("https://www.instagram.com/",
+                                     wait_until="domcontentloaded", timeout=30000)
+                await self.page.wait_for_timeout(4000)
+                nav_ok = True
+                break
+            except Exception as e:
+                last_err = e
+                await asyncio.sleep(3)
+        if not nav_ok:
+            return "logged_out", f"打开失败: {last_err}"
 
         url = (self.page.url or "").lower()
         for hint in sel.CHALLENGE_URL_HINTS:
