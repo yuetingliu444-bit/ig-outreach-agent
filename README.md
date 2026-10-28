@@ -223,6 +223,49 @@ python tests/demo_pitch.py
 
 ---
 
+## 飞书多维表格同步配置（可选）
+
+把本地建联台账（`data/outreach.db`）同步到飞书多维表格，方便在手机/网页端看进度、团队协作。**纯可选**，不配也能正常跑建联。
+
+**前置条件**
+
+- 装好飞书 CLI `lark-cli` 并完成授权（本项目通过 WorkBuddy 飞书连接器认证，使用 `--profile personal` 个人版）。
+- 在飞书建一张多维表格，状态选项需和 `src/feishu_sync.py` 里的 `STATUS_OPTION` 对照表一致（drafted→待发送 / sent→已发送·待回复 / replied→已回复 / failed→发送失败 / rejected→已淘汰 …）。
+
+**配置凭证（不要写死在代码里）**
+
+仓库已把 token 抽离，你只需要在本地放一份私有配置文件：
+
+```bash
+# 1. 复制模板
+cp config/feishu.local.example.json config/feishu.local.json
+
+# 2. 编辑 feishu.local.json，填入你的两个值
+#    base_token —— 飞书多维表格 URL 里 my.feishu.cn/base/<这段就是>
+#    table_id   —— 表格的 table_id（URL 里 tblxxxxxxxx 那段）
+```
+
+`feishu.local.json` 已被 `.gitignore` 忽略，**不会进版本库**，可放心填真实值。
+
+不想用文件，也可以走环境变量（适合 CI / 容器）：
+
+```bash
+set FEISHU_BASE_TOKEN=你的base_token
+set FEISHU_TABLE_ID=你的table_id
+```
+
+读取优先级：环境变量 `FEISHU_BASE_TOKEN` / `FEISHU_TABLE_ID` → 本地 `config/feishu.local.json`。
+
+**同步**
+
+```bash
+python run.py feishu
+```
+
+策略是**增量同步**：按 IG 账号匹配，飞书里已有记录做更新、没有的做新增。每天 9:00 的自动化会调用一次，让在线表永远是最新的。
+
+---
+
 ## 调参
 
 全部在 `config/settings.json`：
