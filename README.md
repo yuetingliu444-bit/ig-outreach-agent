@@ -1,5 +1,17 @@
 # IG 建联 Agent
 
+> ## ⚠️ 免责声明（请先读）
+>
+> **本工具仅用于技术学习，以及「半自动、人工辅助」的 Instagram 建联。** 它**不是**用来绕过平台检测的武器，也**不**鼓励全自动批量私信。
+>
+> - 用脚本自动化发送 Instagram 私信**违反 Instagram 服务条款**，可能导致：临时 Action Block、私信功能被关、**账号被封**（若使用公司品牌号，损失的是品牌资产）。
+> - 本项目内置的风控（随机延迟 / 真实浏览器 / 指纹跟随 / 发送闸门）**只能降低误触发概率，不构成合规保障**，也不改变「自动化访问违反 ToS」的性质。
+> - **强烈推荐 `--assist` 半自动**：脚本负责找人、写文案、填好对话框，**发送键由你点**；需要程序化发送时，请优先研究 Meta 官方 Messaging API 的授权条件。
+> - 使用本项目即表示你已了解并接受上述风险，**后果由使用者自行承担**。作者不对账号封禁、数据泄露或任何使用后果负责。
+> - 采集 / 存储 KOL 个人资料（头像、简介、粉丝、邮箱）需遵守当地数据保护法规（如 GDPR / CCPA），详见下方「数据与隐私合规」。
+
+---
+
 自动化跑通「找 KOL → 补全资料 → 打分 → 写个性化私信 → 发送 → 跟进 → 查回复」整条链路。
 
 ---
@@ -76,18 +88,38 @@ python run.py send --assist --limit 10
 
 ---
 
-## 两步开跑
+## 数据与隐私合规（GDPR / CCPA）
+
+本项目会**采集并本地存储** KOL 的公开个人资料（用户名、头像、简介、粉丝数、邮箱、社交线索等）。使用即代表你承诺自行遵守所适用地区的数据保护法规：
+
+- ** lawful basis / 合法性**：确保你获取与留存这些数据的法律依据（如公开信息合理用途、征得同意、或合同必要），不要抓取你无权处理的个人数据。
+- **数据最小化**：只存建联必需字段，定期清理过期 / 未成交线索（删 `data/` 即抹掉全部本地数据）。
+- **主体权利**：对数据主体的访问、更正、删除请求，你有义务响应。
+- **跨境传输**：若你的运营主体与 KOL 位于不同司法辖区，注意 GDPR 等跨境传输要求。
+- **邮件建联**：发送营销邮件需提供清晰的退订机制，并遵守 CAN-SPAM / CASL / GDPR 等反垃圾邮件法律。
+
+> 本项目不替你做合规判断，也不向任何第三方发送你的数据（除你主动配置的 OpenAI / 飞书端点）。合规责任完全在使用者一方。
+
+---
+
+## 两步开跑（CDP 模式，默认）
 
 ```bash
 # 1. 起配置向导，浏览器打开 http://127.0.0.1:8787 填表保存（不用碰 JSON）
 python run.py setup
 
-# 2. 登录：浏览器自动打开，你在里面登完，它自己检测到并保存（不用回终端按回车）
-python run.py login
+# 2. 开一个带调试端口的真实 Chrome，在里面手动登录 Instagram
+#    （指纹 = 你日常那个浏览器，最稳；窗口保持开着）
+python run.py chrome
 
-# 3. 发
-python run.py pipeline --limit 10 --dry-run   # 先看文案
-python run.py send --limit 10                 # 真发
+# 3. 体检确认登录态
+python run.py check
+
+# 4. 先看文案、不真发
+python run.py pipeline --limit 10 --dry-run
+
+# 5. 半自动真发（脚本填好对话框，发送键由你点）
+python run.py send --limit 10 --assist
 ```
 
 不想用向导，也可以命令行直配：
@@ -96,8 +128,7 @@ python run.py send --limit 10                 # 真发
 python run.py set-targets --competitors "竞品账号" --keywords "tech reviewer" --hashtags "wirelessmic"
 ```
 
-Python 路径（本项目用的隔离环境）：
-`C:\Users\Administrator\.workbuddy\binaries\python\envs\default\Scripts\python.exe`
+> 用你自己环境里的 `python`（建议 `python -m venv .venv` 建虚拟环境后激活）。本仓库不依赖任何特定绝对路径。
 
 ---
 
@@ -142,6 +173,7 @@ python run.py second-touch --limit 5 --assist
 | 命令 | 作用 | 需要开浏览器 |
 |---|---|---|
 | `setup` | 起配置向导页（127.0.0.1:8787），填表写 config | 否 |
+| `init` | 从 `config/*.example.json` 生成正式配置，已存在则跳过 | 否 |
 | `chrome` | 开一个调试版真实 Chrome（复用你日常指纹） | 否 | 先跑它 |
 | `check` | **只读体检**：账号有没有被 challenge / block | 只读 | 冷却期每天跑 |
 | `login` | 开浏览器，你登录，自动检测保存 | 是 | |
@@ -175,7 +207,7 @@ python run.py second-touch --limit 5 --assist
 
 ## 打分规则
 
-启发式，满分 100，默认阈值 55（`config/settings.json` → `qualify.min_score`）：
+启发式，满分 100，默认阈值 45（`config/settings.json` → `qualify.min_score`，这是唯一权威来源，改这里即可）：
 
 | 项 | 分值 |
 |---|---|
@@ -233,12 +265,14 @@ python run.py second-touch --limit 5 --assist
 想看实际会发出去什么，不联网就能预览：
 
 ```bash
-python tests/demo_pitch.py
+python .dev/tests/demo_pitch.py
 ```
 
 ---
 
-## 飞书多维表格同步配置（可选）
+## 飞书多维表格同步配置（可选 · 仅国内用户）
+
+> ⚠️ **可选的中国国内扩展模块**：飞书（Feishu / Lark 国内版）多维表格同步**只对使用飞书的中国国内团队有用**。**海外用户、不使用飞书的团队完全可以忽略本节**，跳过它不影响任何核心 IG 建联功能。
 
 把本地建联台账（`data/outreach.db`）同步到飞书多维表格，方便在手机/网页端看进度、团队协作。**纯可选**，不配也能正常跑建联。
 
@@ -296,9 +330,9 @@ python run.py feishu
   "warmup_daily_cap": 8
 },
 "qualify": {
-  "min_followers": 2000,      // 按你的品类调
-  "max_followers": 500000,
-  "min_score": 55
+  "min_followers": 1000,      // 按你的品类调（内置人工名单粉丝 ≥1000 即放行）
+  "max_followers": 50000000,
+  "min_score": 45
 }
 ```
 
@@ -376,5 +410,5 @@ ig-agent/
 │   └── dashboard.py       看板渲染
 ├── data/                  数据库、浏览器 profile、风控状态
 ├── dashboard/index.html   看板
-└── tests/smoke.py         离线冒烟测试（python tests/smoke.py）
+└── .dev/                  开发 / 调试脚本（非产品功能，已 gitignore，不入库）
 ```

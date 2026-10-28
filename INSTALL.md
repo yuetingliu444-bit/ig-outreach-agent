@@ -84,9 +84,15 @@ python run.py set-targets --competitors "竞品账号" --keywords "tech reviewer
 
 ## 4. 登录 Instagram（仅当你要真发）
 
+默认走 **CDP 模式**：复用你本机已经登录的真实 Chrome（指纹最稳）。
+
 ```bash
-python run.py login        # 浏览器自动打开，你手动登录，脚本检测保存后关闭
+python run.py chrome       # 开一个带调试端口的真实 Chrome，在里面手动登录 IG（窗口保持开着）
+python run.py check        # 体检确认登录态为 ok
 ```
+
+> 无显示器 / 服务器环境：把 `config/settings.json` 的 `browser.mode` 改成 `"playwright"`，
+> 脚本会自带一个 Chromium（`headless` 可设 `true`）。但指纹是新设备，风控风险更高，仅建议临时使用。
 
 > ⚠️ 自动发私信违反 Instagram 服务条款。本项目定位是「**合规建联辅助 + 人工审核**」：
 > 默认提供 `--assist` 半自动（脚本填好对话框，**发送键由你点**）、`--dry-run` 只预览不真发、
@@ -145,7 +151,7 @@ python run.py note @nova_tech_reviews --intent hot --tags "高意向" --note "de
 | 现象 | 排查 |
 |---|---|
 | `ModuleNotFoundError: No module named 'playwright'` | 确认已激活 venv 且执行过 `pip install -r requirements.txt` |
-| 浏览器启动失败 / Crashpad | 后台无桌面时不要 `headless:false`；`config/settings.json` 里 `browser.headless` 保持 `true` |
+| 浏览器启动失败 / Crashpad | 默认 CDP 模式需本地有桌面版 Chrome：先 `python run.py chrome` 再发；无显示器服务器改 `settings.json` 的 `browser.mode` 为 `"playwright"`（自带 Chromium，可 `headless:true`） |
 | API Key 无效 | 检查 `.env` 里 `OPENAI_API_KEY` 是否填对、是否被 gitignore 忽略而未加载 |
 | 登录后脚本说未登录 | 确认 `config/settings.json` 的 `account.profile_dir` 指向的目录和 `login` 用的是同一个 |
 | 发不出去（not_found） | 对方关了私信 / 账号不存在，属正常，会自动标 `failed` |
@@ -163,7 +169,7 @@ python run.py note @nova_tech_reviews --intent hot --tags "高意向" --note "de
 
 ## 10. 命令一览（速查）
 
-`setup` · `login` · `find` · `enrich` · `score` · `draft` · `send [--dry-run|--assist]` ·
+`setup` · `init` · `login` · `find` · `enrich` · `score` · `draft` · `send [--dry-run|--assist]` ·
 `watch` · `second-touch` · `note` · `board` · `pipeline` · `dashboard` · `status` ·
 `export` · `feishu` · `unfreeze`
 

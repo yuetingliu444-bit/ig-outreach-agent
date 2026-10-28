@@ -6,9 +6,10 @@
   },
 
   "browser": {
-    "mode": "playwright",
+    "mode": "cdp",
     "cdp_port": 9222,
-    "headless": true,
+    "headless": false,
+    "executable_path": "",
     "slow_mo_ms": 120,
     "locale": "auto",
     "timezone": "auto",

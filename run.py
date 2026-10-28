@@ -22,7 +22,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from src.browser import IGSession          # noqa: E402
-from src.config import DATA_DIR, load      # noqa: E402
+from src.config import DATA_DIR, load, CONFIG_DIR      # noqa: E402
+from src import validate as cfg_validate    # noqa: E402
 from src import dashboard, discovery, enrich, qualify, copywriter  # noqa: E402
 from src import onboarding, setup_server, board_server            # noqa: E402
 from src.safety import SafetyGuard         # noqa: E402
@@ -79,7 +80,7 @@ def cmd_chrome(args, cfg, store):
     """开一个调试版真实 Chrome —— 指纹就是你日常那个，账号恢复后必走这条路。"""
     b = cfg.settings.get("browser", {})
     from src.browser import launch_debug_chrome
-    if launch_debug_chrome(b.get("cdp_port", 9222)):
+    if launch_debug_chrome(b.get("cdp_port", 9222), b.get("executable_path", "")):
         print("开好之后：python run.py check     # 看账号状态")
         print("          python run.py send --assist --limit 5")
 
@@ -140,10 +141,14 @@ def cmd_score(args, cfg, store):
 
 
 def cmd_draft(args, cfg, store):
+    if not cfg_validate.validate():
+        return
     copywriter.draft(store, cfg)
 
 
 async def cmd_send(args, cfg, store):
+    if not cfg_validate.validate():
+        return
     safety = SafetyGuard(cfg, DATA_DIR)
     s = IGSession(cfg)
     await s.start()
@@ -158,6 +163,8 @@ async def cmd_send(args, cfg, store):
 
 
 async def cmd_second_touch(args, cfg, store):
+    if not cfg_validate.validate():
+        return
     safety = SafetyGuard(cfg, DATA_DIR)
     s = IGSession(cfg)
     await s.start()
@@ -221,6 +228,8 @@ async def cmd_prospect(args, cfg, store):
 
 
 async def cmd_pipeline(args, cfg, store):
+    if not cfg_validate.validate():
+        return
     safety = SafetyGuard(cfg, DATA_DIR)
     s = IGSession(cfg)
     await s.start()
@@ -306,6 +315,36 @@ def cmd_unfreeze(args, cfg, store):
     print("熔断已解除")
 
 
+def cmd_init(args, cfg, store):
+    """复制 config/*.example.json -> *.json（已存在则跳过），并给下一步指引。
+
+    主要解决新手痛点：不知道要先从示例模板初始化正式配置。
+    """
+    import shutil
+    examples = sorted(CONFIG_DIR.glob("*.example.json"))
+    created, skipped = [], []
+    for ex in examples:
+        target = CONFIG_DIR / ex.name.replace(".example.json", ".json")
+        if target.exists():
+            skipped.append(target.name)
+            continue
+        shutil.copy(ex, target)
+        created.append(target.name)
+    if created:
+        print("已生成配置文件：")
+        for n in created:
+            print(f"  ✓ {n}")
+    if skipped:
+        print("已存在（跳过）：")
+        for n in skipped:
+            print(f"  · {n}")
+    print("\n下一步：")
+    print("  1. 编辑 config/brand.json 和 config/pitch.json，把占位符换成你的真实信息")
+    print("     （校验会在 draft / send 前自动拦截残留的 [Brand A] / example.com 等占位）")
+    print("  2. （可选）编辑 config/settings.json 调整风控 / 找人阈值")
+    print("  3. python run.py draft   # 预览会生成的文案")
+
+
 def main():
     ap = argparse.ArgumentParser(description="IG 建联 Agent")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -317,6 +356,8 @@ def main():
     p = sub.add_parser("setup")
     p.add_argument("--no-browser", action="store_true")
     p.set_defaults(fn=cmd_setup, sync=True)
+
+    sub.add_parser("init").set_defaults(fn=cmd_init, sync=True)
 
     sub.add_parser("chrome").set_defaults(fn=cmd_chrome, sync=True)
     sub.add_parser("check").set_defaults(fn=cmd_check, sync=False)

@@ -80,38 +80,58 @@ async def human_pause(low=0.8, high=2.2):
 
 # ---------------------------------------------------------------- 启动真实 Chrome
 
+# 自动探测：Windows / macOS / Linux 都覆盖。用户也可在
+# settings.json -> browser.executable_path 里手动指定，优先级最高。
 CHROME_CANDIDATES = [
+    # Windows
     r"C:\Program Files\Google\Chrome\Application\chrome.exe",
     r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
     os.path.expandvars(r"%LOCALAPPDATA%\Google\Chrome\Application\chrome.exe"),
     r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
     r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+    # macOS
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary",
+    "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+    # Linux
+    "/usr/bin/google-chrome",
+    "/usr/bin/google-chrome-stable",
+    "/usr/bin/chromium",
+    "/usr/bin/chromium-browser",
+    "/snap/bin/chromium",
 ]
 
 
-def find_chrome() -> str:
+def _cross_platform_profile_dir() -> Path:
+    """跨平台用户数据目录，不依赖 Windows 专属的 %LOCALAPPDATA%。"""
+    return Path.home() / ".igagent" / "chrome-profile"
+
+
+def find_chrome(executable_path: str = "") -> str:
+    if executable_path:
+        return executable_path
     for p in CHROME_CANDIDATES:
         if p and os.path.exists(p):
             return p
-    for name in ("chrome", "google-chrome", "msedge"):
+    for name in ("chrome", "google-chrome", "google-chrome-stable", "msedge", "chromium", "chromium-browser"):
         hit = shutil.which(name)
         if hit:
             return hit
     return ""
 
 
-def launch_debug_chrome(port: int = 9222) -> bool:
+def launch_debug_chrome(port: int = 9222, executable_path: str = "") -> bool:
     """开一个带远程调试端口的 Chrome，用的是你日常那个 profile。
 
     因此：指纹、cookie、插件、登录态全部继承，对 IG 来说还是"老设备"。
     """
-    exe = find_chrome()
+    exe = find_chrome(executable_path)
     if not exe:
-        print("没找到 Chrome / Edge。请手动装一个，或把 settings.json 里 "
-              "browser.mode 改成 \"playwright\"。")
+        print("没找到 Chrome / Edge。请手动装一个，或在 settings.json 的 "
+              "browser.executable_path 里指定它的路径。")
         return False
 
-    profile = Path(os.path.expandvars(r"%LOCALAPPDATA%\IGAgent\ChromeProfile"))
+    profile = _cross_platform_profile_dir()
     profile.mkdir(parents=True, exist_ok=True)
 
     cmd = [
@@ -185,9 +205,11 @@ class IGSession:
     async def _start_playwright(self, b):
         self.pw = await async_playwright().start()
         Path(self.cfg.profile_dir).parent.mkdir(parents=True, exist_ok=True)
+        exe = b.get("executable_path", "")
         kwargs = dict(
             user_data_dir=self.cfg.profile_dir,
             headless=b.get("headless", False),
+            executable_path=exe or None,
             slow_mo=b.get("slow_mo_ms", 120),
             viewport={"width": b.get("viewport_width", 1440),
                       "height": b.get("viewport_height", 900)},
