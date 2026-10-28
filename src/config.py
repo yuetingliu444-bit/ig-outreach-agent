@@ -49,6 +49,13 @@ class Config:
 
     @property
     def db_path(self) -> str:
+        # 允许通过环境变量指向独立数据库（用于不登录 IG 的演示模式）
+        override = os.environ.get("OUTREACH_DB")
+        if override:
+            p = Path(override)
+            if not p.is_absolute():
+                p = BASE_DIR / p
+            return str(p)
         return str(DATA_DIR / "outreach.db")
 
 

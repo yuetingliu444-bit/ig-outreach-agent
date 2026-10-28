@@ -2,11 +2,12 @@
 # 这些包含「IG 账号登录凭证」+「公司运营数据」，绝不能进版本库 / 上传 GitHub
 data/
 
-# ==== 公司商务资产：真实话术（含客户案例清单）+ 真实找人目标 ====
+# ==== 公司商务资产：真实话术（含客户案例清单）+ 真实找人目标 + 真实品牌档案 ====
 # 公开仓库里用 *.example.json 模板替代，真实内容只留在本地
 config/pitch.json
 config/targets.json
-# 注：brand.json / settings.json 是占位模板、无凭证，可以进仓库
+config/brand.json
+# 注：settings.json 是占位模板、无凭证，可以进仓库；品牌档案用 brand.json.example 入库
 
 # ==== 品牌名单种子文件：含真实 handle + 官网 + BD 对口理由（商业情报）====
 # 公开仓库里用 tools/import_brands.example.py 展示代码结构即可
@@ -47,3 +48,7 @@ render.log
 __pycache__/
 *.pyc
 .DS_Store
+
+# ==== 本地环境变量（含真实 API Key / 代理，绝不入库）====
+.env
+.env.local

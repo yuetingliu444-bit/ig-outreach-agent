@@ -1,0 +1,10 @@
+# IG 建联 Agent —— Python 依赖
+# 安装：pip install -r requirements.txt
+# Python 要求：>=3.10
+
+playwright>=1.40          # 浏览器自动化（找人/补全/发送）
+openpyxl>=3.1            # 导出 xlsx 报表（tracker / dashboard）
+lxml>=5.0                # HTML 解析（资料补全时的落地页抓取）
+
+# 注意：飞书同步依赖外部 CLI `lark-cli`（飞书官方命令行），不是 pip 包。
+# 安装与授权见 README「飞书多维表格同步配置」一节。
